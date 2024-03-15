@@ -7,18 +7,22 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private PlayerPhysics playerPhysics;
+    [SerializeField] private PlayerSpells playerSpells;
     [SerializeField] private Transform camAnchor;
-    [SerializeField] private float jumpForce, sensitivity, lookLimit;
+    [SerializeField] private float jumpForce, dashForce, vSensitivity, hSensitivity, lookLimit, lookBlend, dashCost;
 
     private Player player;
     private InputAction move, jump, look;
     private InputAction[] actions;
 
-    private Vector3 movement;
+    private Vector3 movement, dashVector;
     private float lookVal;
+    private bool dashed;
 
     private void Awake()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+
         player = new Player();
         actions = new InputAction[3];
 
@@ -35,7 +39,26 @@ public class PlayerController : MonoBehaviour
 
     private void OnJump(InputAction.CallbackContext context)
     {
-        playerPhysics.ApplyForce(new Vector3(0, jumpForce, 0), false, true);
+        if (playerPhysics.grounded)
+        {
+            playerPhysics.ApplyForce(new Vector3(0, jumpForce, 0), false, true);
+        }
+        else if (!dashed)
+        {
+            if (playerSpells.ManaSpend(dashCost))
+            {
+                if (movement == Vector3.zero)
+                {
+                    dashVector = transform.forward;
+                }
+                else
+                {
+                    dashVector = (transform.forward * movement.z + transform.right * movement.x).normalized;
+                }
+
+                playerPhysics.ApplyForce(dashVector * dashForce, false, false);
+            }
+        }
     }
 
     private void OnEnable()
@@ -65,9 +88,15 @@ public class PlayerController : MonoBehaviour
         playerPhysics.ChangeMovement(movement);
 
         //rotate camera and player
-        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y + look.ReadValue<Vector2>().x * sensitivity, 0);
+        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y + look.ReadValue<Vector2>().x * hSensitivity, 0);
 
-        lookVal = Mathf.Clamp(lookVal - look.ReadValue<Vector2>().y * sensitivity, -lookLimit, lookLimit);
+        lookVal = Mathf.Clamp(lookVal - look.ReadValue<Vector2>().y * vSensitivity, -lookLimit, lookLimit);
         camAnchor.localEulerAngles = new Vector3(lookVal, 0, 0);
+
+        //dashed reset
+        if (playerPhysics.grounded && dashed)
+        {
+            dashed = false;
+        }
     }
 }

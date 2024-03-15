@@ -72,7 +72,7 @@ public partial class @Player: IInputActionCollection2, IDisposable
                     ""id"": ""6cd2fd18-84c7-41d1-ae57-1ae8d85454b1"",
                     ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
-                    ""processors"": ""NormalizeVector2"",
+                    ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Look"",
                     ""isComposite"": false,

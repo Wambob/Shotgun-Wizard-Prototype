@@ -7,12 +7,13 @@ public class PlayerPhysics : MonoBehaviour
 {
     [SerializeField] private Rigidbody rb;
     [SerializeField] private Vector3 gravity;
-    [SerializeField] private float terminalVelocity, groundedRayLength, jumpBaseHeight, airResistance, speed, moveBlend;
+    [SerializeField] private float terminalVelocity, groundedRayLength, jumpBaseHeight, airResistance, speed, moveBlend, resistanceForce;
 
-    private RaycastHit groundHit;
+    public bool grounded;
+
+    private RaycastHit groundHit, resistanceHit;
     private Vector3 actingForce, airResistanceV, movementForce, movementForceGoal;
-    private bool grounded;
-
+    
     private void Start()
     {
         groundHit = new RaycastHit();
@@ -62,6 +63,16 @@ public class PlayerPhysics : MonoBehaviour
         {
             actingForce = Vector3.zero;
         }
+
+        //apply resistance force to avoid clipping
+        /*if (actingForce.magnitude >= 10)
+        {
+            Physics.Raycast(transform.position, actingForce, out resistanceHit, actingForce.magnitude);
+            if (resistanceHit.collider != null)
+            {
+                actingForce -= actingForce * resistanceForce * Time.deltaTime;
+            }
+        }*/
 
         //apply all forces
         rb.MovePosition(rb.position + (actingForce + movementForce * speed) * Time.deltaTime);
