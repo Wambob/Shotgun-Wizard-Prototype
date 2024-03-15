@@ -7,12 +7,14 @@ public class PlayerPhysics : MonoBehaviour
 {
     [SerializeField] private Rigidbody rb;
     [SerializeField] private Vector3 gravity;
-    [SerializeField] private float terminalVelocity, groundedRayLength, jumpBaseHeight, airResistance, speed, moveBlend, resistanceForce;
+    [SerializeField] private float groundedRayLength, jumpBaseHeight, airResistance, moveBlend, resistanceForce;
 
+    public Vector3 actingForce, movementForceGoal;
+    public float terminalVelocity, speed;
     public bool grounded;
 
     private RaycastHit groundHit, resistanceHit;
-    private Vector3 actingForce, airResistanceV, movementForce, movementForceGoal;
+    private Vector3 airResistanceV, movementForce;
     
     private void Start()
     {
