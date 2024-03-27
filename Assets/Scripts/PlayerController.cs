@@ -11,8 +11,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform camAnchor;
     [SerializeField] private float jumpForce, dashForce, vSensitivity, hSensitivity, lookLimit, lookBlend, dashCost;
 
+    public InputAction move, jump, look;
+
     private Player player;
-    private InputAction move, jump, look;
     private InputAction[] actions;
 
     private Vector3 movement, dashVector;

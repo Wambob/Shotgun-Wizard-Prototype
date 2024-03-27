@@ -20,14 +20,15 @@ public class ShotgunMovements : MonoBehaviour
     {
         horizontalMove = new Vector2(playerPhysics.actingForce.x, playerPhysics.actingForce.z);
 
-        //apply horizontal forces
-        shotgunPos.y = (walkingRange) * ((horizontalMove.magnitude + playerPhysics.movementForceGoal.magnitude) / playerPhysics.speed) * Mathf.Sin(Time.time * walkingSpeed * ((horizontalMove.magnitude + playerPhysics.movementForceGoal.magnitude) / playerPhysics.speed));
+        //apply vertical forces
+        shotgunPos.y = walkingRange * Mathf.Sin(Time.time * walkingSpeed) * playerPhysics.movementForce.magnitude;
+        print(Mathf.Clamp(Time.time * walkingSpeed * playerPhysics.movementForce.magnitude, Time.time, Mathf.Infinity));
 
-        //apply veritcal forces
-        if (playerPhysics.actingForce.y <= 0)
+        //apply horizontal forces
+        /*if (playerPhysics.actingForce.y <= 0)
         {
             shotgunPos.x = (fallingRange) * (-playerPhysics.actingForce.y / playerPhysics.terminalVelocity) * Mathf.Sin(Time.time * fallingSpeed * (-playerPhysics.actingForce.y / playerPhysics.terminalVelocity) * disparity);
-        }
+        }*/
 
         //apply changes
         shotgun.localPosition = shotgunOrigin + shotgunPos;

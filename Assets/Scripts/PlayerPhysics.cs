@@ -9,12 +9,12 @@ public class PlayerPhysics : MonoBehaviour
     [SerializeField] private Vector3 gravity;
     [SerializeField] private float groundedRayLength, jumpBaseHeight, airResistance, moveBlend, resistanceForce;
 
-    public Vector3 actingForce, movementForceGoal;
+    public Vector3 actingForce, movementForceGoal, movementForce;
     public float terminalVelocity, speed;
     public bool grounded;
 
     private RaycastHit groundHit, resistanceHit;
-    private Vector3 airResistanceV, movementForce;
+    private Vector3 airResistanceV;
     
     private void Start()
     {
